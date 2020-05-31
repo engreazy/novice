@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <style type="text/css">
+    form{
+      padding: 0.5em;
+    }
+    input{
+      margin:0.5em;
+    }
+  </style>
+</head>
+<body>
+  <form action="name.php" method="get">
+    <label for="firstname">First name:</label>
+    <input type="text" name="firstname" id="firstname"><br>
+    <label for="lastname">Email:</label>
+    <input type="text" name="email" id="email"><br>
+    <input type="submit" value="GO">
+  </form>
+  <script>
+    function packConfirmFormInput(array,unusedData){
+      let packForm = [];
+      for(let i = 0, unusedDataLength = unusedData.length; i < unusedDataLength; i++){
+          array.forEach(function(element,index){
+              if (element.name == unusedData[i]) {
+                  console.log(`True element name is  ${element.name} and unusedData value is ${unusedData[i]}`);
+                packForm[i] = array.splice(index,1);
+                }else{
+                  console.log(`False element name is  ${element.name} and unusedData value is ${unusedData[i]}`);
+              }
+          });
+      }
+      console.log("packForm is now");
+      console.log(packForm);
+      return packForm;
+    }
+
+  </script>
+</body>
+</html>
