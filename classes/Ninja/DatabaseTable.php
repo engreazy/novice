@@ -23,10 +23,16 @@ class DatabaseTable
     $query->execute($parameters);
     return $query;
   }
-  public function total(){
-    $query = $this->query('SELECT COUNT(*) FROM `'.$this->table.'`');
+  public function total($field = null, $value = null){
+    $query ='SELECT COUNT(*) FROM `'.$this->table.'`';
+    $parameters = [];
+     if (!empty($field)) {
+      $query .= ' WHERE `' . $field . '` = :value';
+      $parameters = ['value' => $value];
+    }
+    //return $query;
+    $query = $this->query($query, $parameters);
     $row = $query->fetch();
-
     return $row[0];
   }
 
@@ -103,11 +109,20 @@ class DatabaseTable
     $jokes = $this->query($pdo,$sql);
     return $jokes->fetchAll();
   }
-  public function find($column,$value){
+  public function find($column,$value, $orderBy = null, $limit = null, $offset = null){
     $query = 'SELECT * FROM ' . $this->table . ' WHERE ' . $column . ' =:value ';
     $parameters = [
       'value' => $value
     ];
+    if ($orderBy != null) {
+      $query .= ' ORDER BY ' .$orderBy;
+    }
+    if ($limit != null) {
+      $query .= ' LIMIT ' . $limit;
+    }
+    if ($offset != null) {
+      $query .= ' OFFSET ' .$offset;
+    }
     $query = $this->query($query,$parameters);
     return $query->fetchAll(\PDO::FETCH_CLASS, $this->className,$this->constructorArgs);
   }
@@ -117,8 +132,19 @@ class DatabaseTable
     return $authors->fetchAll();
   }
 
-  public function findAll(){
-    $result = $this->query('SELECT * FROM `'.$this->table.'`');
+  public function findAll($orderBy = null, $limit = null, $offset = null){
+    $query = 'SELECT * FROM `'.$this->table.'`';
+
+    if ($orderBy != null) {
+      $query .=' ORDER BY ' . $orderBy;
+    }
+    if ($limit != null) {
+      $query .= ' LIMIT ' . $limit;
+    }
+    if ($offset != null) {
+      $query .= ' OFFSET ' . $offset;
+    }
+    $result = $this->query($query);
     $result->setFetchMode(\PDO::FETCH_CLASS,$this->className,$this->constructorArgs);
     $obj = $result->fetchAll();
     return $obj;

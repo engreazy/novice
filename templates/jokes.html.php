@@ -1,3 +1,11 @@
+<style>
+  .currentpage:before {
+    content: "[";
+  }
+  .currentpage:after {
+    content: "]";
+  }
+</style>
 <pre>
   <?php
   // echo "<p>jokes</p>";
@@ -19,8 +27,9 @@
 <a href="/novice/joke/edit">Add Joke</a>
 <?php foreach($jokes as $joke):?>
 <blockquote>
-  <p>
-    <?=htmlspecialchars($joke->joketext,ENT_QUOTES,'UTF-8');?>
+
+    <?=(new \Ninja\Markdown($joke->joketext))->toHtml()?>
+
     (By <a href="mailto:<?php
       echo htmlspecialchars($joke->getAuthor()->email,
       ENT_QUOTES,
@@ -47,6 +56,16 @@
         </form>
       <?php endif; ?>
   <?php endif; ?>
-  </p>
 </blockquote>
 <?php endforeach; ?>
+Select page:
+<?php
+$numPages = ceil($totalJokes/10);
+  for ($i = 1; $i <= $numPages; $i++):
+    if ($i == $currentPage):
+?>
+    <a class="currentpage"href="/novice/joke/list?page=<?=$i?><?=!empty($categoryid) ?'&category=' . $categoryid : '' ?>"><?=$i?></a>
+<?php else: ?>
+    <a href="/novice/joke/list?page=<?=$i?><?=!empty($categoryid) ?'&category=' . $categoryid : '' ?>"><?=$i?></a>
+  <?php endif; ?>
+<?php endfor; ?>

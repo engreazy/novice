@@ -1,8 +1,27 @@
 <?php
-if (6 & 2) {
-  echo "true <br>";
+$string = 'April 15, 2003';
+$pattern = '/(\w+) (\d+), (\d+)/i';
+$replacement = '${1}4,$3';
+echo preg_replace($pattern, $replacement, $string);
+echo "<br>";
+$text = 'banana';
+$text = preg_replace('/(.*)(nana)/', '$2$1', $text);
+echo $text; // outputs 'nanaba
+$new_year = preg_replace('/200[0-9]/', '2010', 'The year is 2009');
+echo "<br><pre>";
+var_dump($new_year);
+echo "</pre>";
+$text = 'What is Php? ';
+if (preg_match('/PHP/i', $text)) {
+  echo "<p>$text contains the string 'PHP'</p>";
 }else{
-  echo "false<br>";
+  echo "<p>$text does not contain the string 'PHP'</p>";
+}
+
+if (6 & 2) {
+  echo "<br>true <br>";
+}else{
+  echo "<br>false<br>";
 }
 
 // Function to print hollow rectangle
